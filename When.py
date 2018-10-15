@@ -20,35 +20,54 @@ class When(object):
     def then(self, operationToDo):
         if self.state:
             self.used = True
-            self.callableObject = operationToDo(self.obj)
+            self.callableObject = operationToDo(self.obj) if callable(operationToDo) else operationToDo
         return self
 
     def otherwise(self, operationToDo):
         if not self.state and not self.used:
-            return operationToDo(self.obj)
+            return operationToDo(self.obj) if callable(operationToDo) else operationToDo
         else:
             return self.callableObject
 
 
-testArgument = []
+if __name__ == '__main__':
 
-def itsStr(n):
-    return "its str"
+    def firstTest():
+        testArgument = []
 
-def itsInt(n):
-   return "its int"
+        def itsStr(n):
+            return "its str"
 
-def pop(n):
-    return "just dance"
+        def itsInt(n):
+            return "its int"
 
-def tellMeAboutIt(*arg):
-    return "wrong!"
+        def pop(n):
+            return "just dance"
 
-value = ( 
-    When(testArgument)
-        .of(str).then(itsStr)
-        .of(10).then(itsInt)
-        .of([]).then(pop)
-        .otherwise(tellMeAboutIt)
-)
-print(value)
+        def tellMeAboutIt(*arg):
+            return "wrong!"
+
+        value = ( 
+            When(testArgument)
+                .of(str).then(itsStr)
+                .of(10).then(itsInt)
+                .of([]).then(pop)
+                .otherwise(tellMeAboutIt)
+        )
+
+        assert value == "just dance"
+    
+    def secondTest():
+        
+        myTestArugment = 100
+
+        value = (
+            When(myTestArugment)
+                .of(25 * 42).then("you got it right.")
+                .otherwise("I think you missed the point.")
+        )
+
+        assert value == "you got it right"
+    
+
+    secondTest()
