@@ -3,12 +3,11 @@ class Try(object):
     def __init__(self, action):
         self.action = action
         self.result = None
-        self.failedDueToTheException = False
-        #self.failedDueOtherException = False
+        self.failedDueToTheRightException = False
 
     def inCaseOfFailureBy(self, exceptionType):
         
-        if self.failedDueToTheException or self.result:
+        if self.failedDueToTheRightException or self.result:
             return self
 
         try:
@@ -18,7 +17,7 @@ class Try(object):
         except Exception as err:
 
             if isinstance(err, exceptionType):
-                self.failedDueToTheException = True
+                self.failedDueToTheRightException = True
                 return self
 
         return self
@@ -29,7 +28,7 @@ class Try(object):
         if self.result:
             return self
         
-        if self.failedDueToTheException:
+        if self.failedDueToTheRightException:
             
             self.result = operation()
             return self
