@@ -1,5 +1,6 @@
 from typing import Dict, Any
 
+
 class NamedDict(object):
 
     def __init__(self, anyDict: Dict[Any, Any] = {}):
@@ -34,11 +35,52 @@ class NamedDict(object):
     
 
     
-
+def load(jsonFilePath: str) -> NamedDict:
     
+    newNamedDict = NamedDict()
+    with open(jsonFilePath, "rb") as jsReader:
+        import json
+        jsonDict = json.load(jsonFilePath)
+    
+    return _buildNamedDict(jsonDict, newNamedDict)
+
+
+def _buildNamedDict(jsonDict: Dict[Any, Any], newNamedDict: NamedDict) -> NamedDict:
+    
+    for item, itemValue in jsonDict.items():
+        if not isinstance(itemValue, dict):
+            newNamedDict.__setattr__(item, itemValue)
+        else:
+            newNamedDict.__setattr__(item, _buildNamedDict(itemValue, newNamedDict))
+    
+    return newNamedDict
+
+
 
 if __name__ == '__main__':
-    
+
+    def testBuildNamedDict():
+        demoDict = {
+            "name": "benny",
+            "age": 30,
+            "birthday": "1989",
+            "brothers": {
+                "itay": 21,
+                "adi": 16,
+                "vered": {
+                    "age": 27,
+                    "kids": {
+                        "orian": 2,
+                        "linoy": 0.5
+                    }
+                }
+            }
+        }
+        newNamedDict = NamedDict()
+        convertedData = _buildNamedDict(demoDict, newNamedDict)
+        assert convertedData.brothers.vered.age == 27
+        assert convertedData.brothers.vered.kids.orian == 2
+
     def unionTest():
         test = NamedDict({"benny": 10, "elgazar": 1, "age": 89})
         test2 = NamedDict({"first": 5})
@@ -59,9 +101,7 @@ if __name__ == '__main__':
         assert test.properties.firstName == "benny"
 
 
-        
-    
-
+    testBuildNamedDict()
     simpleCallTest()
     unionTest()
     nestedCalls()
