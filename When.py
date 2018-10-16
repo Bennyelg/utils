@@ -1,3 +1,4 @@
+
 class When(object):
 
     state = None
@@ -63,11 +64,15 @@ if __name__ == '__main__':
 
         value = (
             When(myTestArugment)
-                .of(25 * 42).then("you got it right.")
+                .of(25 * 4).then("you got it right.")
                 .otherwise("I think you missed the point.")
         )
-
-        assert value == "you got it right"
+        value2 = (
+            When(10)
+            .of(15).then("yep!")
+            .otherwise(None)
+        )
+        assert value == "you got it right."
     
 
     secondTest()
