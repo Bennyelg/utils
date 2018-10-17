@@ -40,7 +40,7 @@ def load(jsonFilePath: str) -> NamedDict:
     newNamedDict = NamedDict()
     with open(jsonFilePath, "rb") as jsReader:
         import json
-        jsonDict = json.load(jsonFilePath)
+        jsonDict = json.load(jsReader)
     
     return buildNamedDict(jsonDict, newNamedDict)
 
