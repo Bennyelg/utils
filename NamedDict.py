@@ -3,6 +3,24 @@ from typing import Dict, Any
 
 class NamedDict(object):
 
+    """Simplify python dictionarys by allowance dot anotation of set and get. 
+    
+    # * Simple Usage *
+
+    >> myNamedDict = NamedDict()
+    >> myNamedDict.name = "Benny"
+    >> myNamedDict.age = 29
+    >> myNamedDict.extraInfo = NamedDict()
+    >> myNamedDict.extraInfo.totalYearsOfExperiance = 5
+    >> myNamedDict.name == "Benny"
+    >> True
+    >> myNamedDict.extraInfo.totalYearsOfExperiance == 5
+    >> True
+    >> myNamedDict.hasKey("totalYearsOfExperiance")
+    >> True
+
+    """
+
     def __init__(self, anyDict: Dict[Any, Any] = {}):
         self.__dict__.update(**anyDict)
     
@@ -43,7 +61,8 @@ class NamedDict(object):
                 if isinstance(value, dict):
                     return hasKey(keyName, value)
         return False
-    
+
+
 def load(jsonFilePath: str) -> NamedDict:
     
     newNamedDict = NamedDict()
