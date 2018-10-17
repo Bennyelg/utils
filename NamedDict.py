@@ -42,16 +42,16 @@ def load(jsonFilePath: str) -> NamedDict:
         import json
         jsonDict = json.load(jsonFilePath)
     
-    return _buildNamedDict(jsonDict, newNamedDict)
+    return buildNamedDict(jsonDict, newNamedDict)
 
 
-def _buildNamedDict(jsonDict: Dict[Any, Any], newNamedDict: NamedDict) -> NamedDict:
+def buildNamedDict(jsonDict: Dict[Any, Any], newNamedDict: NamedDict) -> NamedDict:
     
     for item, itemValue in jsonDict.items():
         if not isinstance(itemValue, dict):
             newNamedDict.__setattr__(item, itemValue)
         else:
-            newNamedDict.__setattr__(item, _buildNamedDict(itemValue, newNamedDict))
+            newNamedDict.__setattr__(item, buildNamedDict(itemValue, newNamedDict))
     
     return newNamedDict
 
