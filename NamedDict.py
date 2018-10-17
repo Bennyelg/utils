@@ -33,7 +33,16 @@ class NamedDict(object):
     def __len__(self):
         return len(self.__dict__)
     
-
+    def hasKey(self, keyName, initDict = None):
+        if not initDict:
+            initDict = self.__dict__
+        if keyName in initDict:
+            return True
+        else:
+            for _, value in self.__dict__.items():
+                if isinstance(value, dict):
+                    return hasKey(keyName, value)
+        return False
     
 def load(jsonFilePath: str) -> NamedDict:
     
@@ -77,7 +86,7 @@ if __name__ == '__main__':
             }
         }
         newNamedDict = NamedDict()
-        convertedData = _buildNamedDict(demoDict, newNamedDict)
+        convertedData = buildNamedDict(demoDict, newNamedDict)
         assert convertedData.brothers.vered.age == 27
         assert convertedData.brothers.vered.kids.orian == 2
 
