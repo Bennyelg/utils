@@ -31,7 +31,7 @@ class List(list):
         if isfunction(sumFunc):
             return sum(sumFunc(item) for item in self)
         else:
-            print("here2")
+
             return sum(el for el in self)
     
     @property

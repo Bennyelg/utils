@@ -12,7 +12,7 @@ class Try(object):
 
         try:
 
-            return self.action()
+            self.result = self.action if not callable(self.action) else self.action()
 
         except Exception as err:
 
@@ -24,13 +24,11 @@ class Try(object):
 
     
     def doThis(self, operation):
-        
         if self.result:
             return self
         
         if self.failedDueToTheRightException:
-            
-            self.result = operation()
+            self.result = operation() if callable(operation) else operation
             return self
         
         else:
@@ -70,8 +68,8 @@ if __name__ == '__main__':
     assert (
         Try(do)
             .inCaseOfFailureBy(ZeroDivisionError)
-            .doThis(doFix)
+            .doThis("hello")
             .inCaseOfFailureBy(FileNotFoundError)
             .doThis(sleep)
-        ).getResult == 1
-    
+        ).getResult == "hello"
+

@@ -50,17 +50,10 @@ class NamedDict(object):
     
     def __len__(self):
         return len(self.__dict__)
-    
-    def hasKey(self, keyName, initDict = None):
-        if not initDict:
-            initDict = self.__dict__
-        if keyName in initDict:
-            return True
-        else:
-            for _, value in self.__dict__.items():
-                if isinstance(value, dict):
-                    return hasKey(keyName, value)
-        return False
+
+    def hasKey(self, keyName):
+        if keyName in self.__dict__: return True
+        else: return False
 
 
 def load(jsonFilePath: str) -> NamedDict:
@@ -87,8 +80,7 @@ def buildNamedDict(jsonDict: Dict[Any, Any], newNamedDict: NamedDict) -> NamedDi
 
 if __name__ == '__main__':
 
-    def testBuildNamedDict():
-        demoDict = {
+    demoDict = {
             "name": "benny",
             "age": 30,
             "birthday": "1989",
@@ -104,6 +96,9 @@ if __name__ == '__main__':
                 }
             }
         }
+
+    def testBuildNamedDict():
+
         newNamedDict = NamedDict()
         convertedData = buildNamedDict(demoDict, newNamedDict)
         assert convertedData.brothers.vered.age == 27
@@ -122,6 +117,11 @@ if __name__ == '__main__':
         test.age = 15
         assert test.age == 15 and test.name == "Benny"
     
+    def checkHasKey():
+        newNamedDict = NamedDict()
+        convertedData = buildNamedDict(demoDict, newNamedDict)
+        assert convertedData.brothers.hasKey("vered") == True
+
     def nestedCalls():
         test = NamedDict()
         test.properties = NamedDict()
@@ -129,6 +129,7 @@ if __name__ == '__main__':
         assert test.properties.firstName == "benny"
 
 
+    checkHasKey()
     testBuildNamedDict()
     simpleCallTest()
     unionTest()
