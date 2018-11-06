@@ -13,10 +13,10 @@ class List(list):
             self.append(item)
 
 
-    def filter(self, func):
+    def filter(self, func, *args, **kwargs):
         changedList = []
         for element in self:
-            if func(element):
+            if func(element, *args, **kwargs):
                 changedList.append(element)
         return List(*changedList)
     
@@ -36,10 +36,7 @@ class List(list):
     
     @property
     def length(self):
-        length = 0
-        for _ in self:
-            length += 1
-        return length
+        return len(self)
 
     @property
     def distinct(self):
@@ -67,12 +64,14 @@ class List(list):
 
     @property
     def isEmpty(self):
-        return not any(True for _ in self)
+        if self:
+            return False
+        return True
 
-    def map(self, func):
+    def map(self, func, *args, **kwargs):
         newList = []
         for item in self:
-            newList.append(func(item))
+            newList.append(func(item, *args, **kwargs))
         return List(*newList)
 
     @property
@@ -100,10 +99,10 @@ class List(list):
     def zipWithIndex(self):
         self = List(*list(enumerate(self)))
         return self    
-                    
+               
     def slice(self, start, end):
         return List(*self[start: end])
-    
+
     def sortIt(self, key=None, decendingOrder=False):
         if not key:
             fn = lambda x: x
@@ -128,21 +127,46 @@ class List(list):
     def toDict(self, listOfKeys = None):
         if listOfKeys:
             return dict(zip(listOfKeys, self))
-        else:
-            return dict(zip(range(self.length), self))
+        return dict(zip(range(self.length), self))
 
 
 
 
 if __name__ == '__main__':
     
-    def filterLowerThen10(num):
-        if num > 10:
+    def filterLowerThen10(_):
+        if _ > 10:
             return True
 
-    def multiplyEachBy10(num):
-        return num * 10
+    def multiplyEachBy10(_):
+        return _ * 10
 
+    def someMappingFuncWithWhichAcceptParameters(_, multiplier=5):
+        return _ * multiplier
+
+    def someMappingFuncWithArgs(_, multiplier):
+        return _ * multiplier
+
+    def ifIsGreaterthan(_, n):
+        return _ > n
+
+    # should accept additional function parameters. args
+    assert (
+        List(1, 2, 3, 4, 5)
+            .map(someMappingFuncWithArgs, 2)
+    ) == [2, 4, 6, 8, 10]
+    
+    # should accept additional function parameters. kwargs
+    assert (
+        List(1, 2, 3, 4, 5)
+            .map(someMappingFuncWithWhichAcceptParameters, multiplier=2)
+        
+    ) == [2, 4, 6, 8, 10]
+
+    assert(
+        List(10, 20, 30, 40, 50, 60)
+            .filter(ifIsGreaterthan, 25)
+    ) == [30, 40, 50, 60]
 
     # Should be equal to 610
     assert(
