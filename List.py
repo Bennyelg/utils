@@ -142,26 +142,31 @@ if __name__ == '__main__':
         return _ * 10
 
     def someMappingFuncWithWhichAcceptParameters(_, multiplier=5):
-        return _ * multiplier
+        if _ * multiplier > 5:
+            return True
+        return False
 
     def someMappingFuncWithArgs(_, multiplier):
-        return _ * multiplier
+        if _ * multiplier > 5:
+            return True
+        return False
 
     def ifIsGreaterthan(_, n):
         return _ > n
 
     # should accept additional function parameters. args
+
     assert (
         List(1, 2, 3, 4, 5)
             .map(someMappingFuncWithArgs, 2)
-    ) == [2, 4, 6, 8, 10]
+    ) == [False, False, True, True, True]
     
     # should accept additional function parameters. kwargs
     assert (
         List(1, 2, 3, 4, 5)
             .map(someMappingFuncWithWhichAcceptParameters, multiplier=2)
         
-    ) == [2, 4, 6, 8, 10]
+    ) == [False, False, True, True, True]
 
     assert(
         List(10, 20, 30, 40, 50, 60)
