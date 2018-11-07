@@ -5,7 +5,7 @@ class Try(object):
         self.result = None
         self.failedDueToTheRightException = False
 
-    def inCaseOfFailureBy(self, exceptionType):
+    def inCaseOf(self, exceptionType):
         
         if self.failedDueToTheRightException or self.result:
             return self
@@ -23,7 +23,7 @@ class Try(object):
         return self
 
     
-    def doThis(self, operation):
+    def then(self, operation):
         if self.result:
             return self
         
@@ -40,16 +40,16 @@ class Try(object):
 
 
 if __name__ == '__main__':
-    def do():
+    def then():
         return 5 / 0
 
-    def doFix():
+    def thenFix():
         return 1
 
     def sleep():
         import time
         time.sleep(5)
-        return "Done"
+        return "thenne"
 
     def read():
         rdr = open("xxx.xxx", "rb")
@@ -58,18 +58,18 @@ if __name__ == '__main__':
     print("Test #1")
     assert (
         Try(read)
-            .inCaseOfFailureBy(ZeroDivisionError)
-            .doThis(doFix)
-            .inCaseOfFailureBy(FileNotFoundError)
-            .doThis(sleep)
-        ).getResult == "Done"
+            .inCaseOf(ZeroDivisionError)
+            .then(thenFix)
+            .inCaseOf(FileNotFoundError)
+            .then(sleep)
+        ).getResult == "thenne"
 
     print("Test #2")
     assert (
-        Try(do)
-            .inCaseOfFailureBy(ZeroDivisionError)
-            .doThis("hello")
-            .inCaseOfFailureBy(FileNotFoundError)
-            .doThis(sleep)
+        Try(then)
+            .inCaseOf(ZeroDivisionError)
+            .then("hello")
+            .inCaseOf(FileNotFoundError)
+            .then(sleep)
         ).getResult == "hello"
 
