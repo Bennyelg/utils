@@ -8,6 +8,18 @@ from threading import Timer
 from functools import partial
 
 
+def seconds(n):
+    return n
+
+
+def minutes(n):
+    return n * 60
+
+
+def hours(n):
+    return n * 60 * 60
+
+
 class Interval(object):
 
     def __init__(self, interval, function, args=[], kwargs={}):
@@ -115,6 +127,6 @@ if __name__ == '__main__':
     print(cache.num_of_keys())
     cache.set("game2", "Oni 4")
     print(cache.num_of_keys())
-    cache.set("expired_key", "Oni 5", ttl=5)
+    cache.set("expired_key", "Oni 5", ttl=seconds(5))
 
     cache.flush_all()
